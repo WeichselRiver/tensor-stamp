@@ -1,3 +1,4 @@
+#%%
 from matplotlib import pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -5,27 +6,34 @@ from tensorflow.keras import Sequential, layers
 
 img_height = 128
 img_width = 128
-num_classes = 2
+num_classes = 4
+data_path = "data1"
+batch_size = 2
 
 data_augmentation = Sequential(
   [
-    layers.RandomFlip("horizontal",
-                      input_shape=(img_height,
-                                  img_width,
-                                  3)),
-    layers.RandomRotation(0.25),
-    layers.RandomZoom(0.1),
+ 
+    layers.RandomRotation(factor = (-0.01, 0.01), fill_mode = "constant", fill_value = 0),
+    layers.RandomZoom(0.1, fill_mode = "constant", fill_value = 0),
   ]
 )
 
 
 train_ds = tf.keras.utils.image_dataset_from_directory(
- "data",
-  validation_split=0.2,
+ data_path,
+  validation_split=0.2, 
   subset="training",
   seed=123,
   image_size=(img_height, img_width),
-  batch_size=32)
+  batch_size=2)
+
+val_ds = tf.keras.utils.image_dataset_from_directory(
+  data_path,
+  validation_split=0.2,
+  subset="validation",
+  seed=123,
+  image_size=(img_height, img_width),
+  batch_size=2)
 
 plt.figure(figsize=(10, 10))
 for images, _ in train_ds.take(2):
@@ -37,10 +45,8 @@ for images, _ in train_ds.take(2):
 
 
 
-
-
-
 model = Sequential([
+  # data_augmentation,
   layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
   layers.Conv2D(16, 3, padding='same', activation='relu'),
   layers.MaxPooling2D(),
@@ -52,21 +58,13 @@ model = Sequential([
   layers.Dense(128, activation='relu'),
   layers.Dense(num_classes)
 ])
-# %%
+
 model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
-# %%
-model.summary()
-val_ds = tf.keras.utils.image_dataset_from_directory(
-  "data",
-  validation_split=0.2,
-  subset="validation",
-  seed=123,
-  image_size=(img_height, img_width),
-  batch_size=32)
 
-# %%
+# model.summary()
+
 epochs=10
 history = model.fit(
   train_ds,
@@ -74,7 +72,7 @@ history = model.fit(
   epochs=epochs
 )
 
-#%%
+
 acc = history.history['accuracy']
 val_acc = history.history['val_accuracy']
 
@@ -96,7 +94,7 @@ plt.plot(epochs_range, val_loss, label='Validation Loss')
 plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.show()
-#%%
+
 class_names = train_ds.class_names
 print(class_names)
 
@@ -106,7 +104,7 @@ print(class_names)
 # sunflower_path = tf.keras.utils.get_file('crying-at-work')
 
 img = tf.keras.utils.load_img(
-    "crying-at-work.jpg", target_size=(img_height, img_width)
+    "Tsd500.jpg", target_size=(img_height, img_width)
 )
 img_array = tf.keras.utils.img_to_array(img)
 img_array = tf.expand_dims(img_array, 0) # Create a batch
