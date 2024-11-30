@@ -65,13 +65,14 @@ model.compile(optimizer='adam',
 
 # model.summary()
 
-epochs=10
+epochs=50
 history = model.fit(
   train_ds,
   validation_data=val_ds,
   epochs=epochs
 )
 
+model.save("model.keras")
 
 acc = history.history['accuracy']
 val_acc = history.history['val_accuracy']
@@ -99,23 +100,3 @@ class_names = train_ds.class_names
 print(class_names)
 
 
-# %%
-# sunflower_url = "https://storage.googleapis.com/download.tensorflow.org/example_images/592px-Red_sunflower.jpg"
-# sunflower_path = tf.keras.utils.get_file('crying-at-work')
-
-img = tf.keras.utils.load_img(
-    "Tsd500.jpg", target_size=(img_height, img_width)
-)
-img_array = tf.keras.utils.img_to_array(img)
-img_array = tf.expand_dims(img_array, 0) # Create a batch
-
-predictions = model.predict(img_array)
-score = tf.nn.softmax(predictions[0])
-
-print(
-    "This image most likely belongs to {} with a {:.2f} percent confidence."
-    .format(class_names[np.argmax(score)], 100 * np.max(score))
-)
-# %%
-img
-# %%
