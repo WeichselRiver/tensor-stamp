@@ -2,8 +2,8 @@
 import numpy as np
 import tensorflow as tf
 
-img_height = 128
-img_width = 128
+img_height = 200
+img_width = 200
 
 model = tf.keras.models.load_model('model.keras')
 
@@ -17,10 +17,12 @@ img_array = tf.expand_dims(img_array, 0) # Create a batch
 predictions = model.predict(img_array)
 score = tf.nn.softmax(predictions[0])
 
-class_names = ['Mio1', 'Mio10', 'Mio20', 'Tsd500']
+class_names = ['253_2000_blau', '254_3000_braun', '255_4000_violett', 'Mio1', 'Mio10', 'Mio20', 'Tsd500']
 
 print(
     "This image most likely belongs to {} with a {:.2f} percent confidence."
     .format(class_names[np.argmax(score)], 100 * np.max(score))
 )
+# %%
+
 # %%

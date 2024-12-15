@@ -3,12 +3,13 @@ from matplotlib import pyplot as plt
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras import Sequential, layers
+import datetime
 
-img_height = 128
-img_width = 128
-num_classes = 4
+img_height = 200
+img_width = 200
+num_classes = 7
 data_path = "data1"
-batch_size = 2
+batch_size = 10
 
 data_augmentation = Sequential(
   [
@@ -46,7 +47,7 @@ for images, _ in train_ds.take(2):
 
 
 model = Sequential([
-  # data_augmentation,
+  data_augmentation,
   layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
   layers.Conv2D(16, 3, padding='same', activation='relu'),
   layers.MaxPooling2D(),
@@ -65,12 +66,15 @@ model.compile(optimizer='adam',
 
 # model.summary()
 
+a = datetime.datetime.now()
 epochs=50
 history = model.fit(
   train_ds,
   validation_data=val_ds,
   epochs=epochs
 )
+b = datetime.datetime.now()
+print((b-a).microseconds)
 
 model.save("model.keras")
 
@@ -100,3 +104,5 @@ class_names = train_ds.class_names
 print(class_names)
 
 
+
+# %%
