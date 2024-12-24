@@ -10,13 +10,13 @@ from tensorflow.keras.preprocessing import image
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
 import keras
-from keras.api.layers import Conv2D, BatchNormalization, MaxPooling2D, Dropout, Flatten, Dense
+from tensorflow.keras.layers import Conv2D, BatchNormalization, MaxPooling2D, Dropout, Flatten, Dense
 from tensorflow.keras import Sequential
 
 SIZE = 200
 
 
-root_path = Path(r"C:\Code\tensor-stamp\data1")
+root_path = Path(r"C:\Code\tensor_stamps\data1")
 files = glob.glob("**/*.jpg", root_dir="data1", recursive=True)
 df_out = pd.DataFrame({"filenames" : files})
 # df_out.to_csv("data.csv", index=False)
@@ -96,7 +96,7 @@ plt.legend()
 plt.show()
 
 # %%
-img = image.load_img(r"C:\Code\tensor-stamp\Mio1.jpg", target_size=(SIZE,SIZE,3))
+img = image.load_img(r"C:\Code\tensor_stamps\Mio1.jpg", target_size=(SIZE,SIZE,3))
 img = image.img_to_array(img)
 img = img/255.
 plt.imshow(img)

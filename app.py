@@ -9,7 +9,7 @@ img_height = 200
 img_width = 200
 num_classes = 7
 data_path = "data1"
-batch_size = 10
+batch_size = 5
 
 data_augmentation = Sequential(
   [
@@ -47,7 +47,7 @@ for images, _ in train_ds.take(2):
 
 
 model = Sequential([
-  data_augmentation,
+  
   layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
   layers.Conv2D(16, 3, padding='same', activation='relu'),
   layers.MaxPooling2D(),
@@ -67,7 +67,7 @@ model.compile(optimizer='adam',
 # model.summary()
 
 a = datetime.datetime.now()
-epochs=50
+epochs=20
 history = model.fit(
   train_ds,
   validation_data=val_ds,
@@ -101,7 +101,7 @@ plt.title('Training and Validation Loss')
 plt.show()
 
 class_names = train_ds.class_names
-print(class_names)
+print("class names: ", class_names)
 
 
 
